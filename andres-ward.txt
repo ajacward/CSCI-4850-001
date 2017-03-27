@@ -1,0 +1,1647 @@
+1. Team information
+	a.	Andres Ward
+	b.	I am the only member so all tables.
+
+2. Creation/population SQL queries
+	
+CREATE TABLE `airplane` (
+  `airplane_id` int(11) NOT NULL,
+  `make` varchar(20) NOT NULL,
+  `model` varchar(30) NOT NULL,
+  `factory_date` date NOT NULL,
+  `miles` int(15) NOT NULL,
+  `passenger_capacity` int(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `airport` (
+  `airport_id` char(3) NOT NULL,
+  `city` varchar(30) NOT NULL,
+  `state` char(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `arrival` (
+  `flight_id` int(11) NOT NULL,
+  `airport_id` char(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `attendants_scheduled` (
+  `crew_manifest_id` int(11) NOT NULL,
+  `attendant_id1` int(11) NOT NULL,
+  `attendant_id2` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `copilot_scheduled` (
+  `crew_manifest_id` int(11) NOT NULL,
+  `copilot_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `crew_manifest` (
+  `crew_manifest_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `crew_scheduled` (
+  `flight_id` int(11) NOT NULL,
+  `crew_manifest_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `customer` (
+  `customer_id` int(11) NOT NULL,
+  `street_number` varchar(10) NOT NULL,
+  `street_name` varchar(30) NOT NULL,
+  `apt_number` varchar(10) DEFAULT NULL,
+  `city` varchar(30) NOT NULL,
+  `state` char(2) NOT NULL,
+  `zip` char(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `departure` (
+  `flight_id` int(11) NOT NULL,
+  `airport_id` char(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `employee` (
+  `employee_id` int(11) NOT NULL,
+  `birth_date` date NOT NULL,
+  `gender` char(1) NOT NULL,
+  `street_number` varchar(10) NOT NULL,
+  `street_name` varchar(30) NOT NULL,
+  `apt_number` varchar(10) DEFAULT NULL,
+  `city` varchar(30) NOT NULL,
+  `state` char(2) NOT NULL,
+  `zip` char(5) NOT NULL,
+  `start_date` date NOT NULL,
+  `salary` decimal(9,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `flight` (
+  `flight_id` int(11) NOT NULL,
+  `departure_date` date NOT NULL,
+  `departure_time` time NOT NULL,
+  `arrival_date` date NOT NULL,
+  `arrival_time` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `flight_attendant` (
+  `attendant_id` int(11) NOT NULL,
+  `flight_hours` decimal(12,2) NOT NULL,
+  `cell_phone` char(10) NOT NULL,
+  `rank` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `has` (
+  `ticket_id` int(11) NOT NULL,
+  `passenger_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `home_airport` (
+  `employee_id` int(11) NOT NULL,
+  `airport_id` char(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `lead_scheduled` (
+  `crew_manifest_id` int(11) NOT NULL,
+  `lead_attendant_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `passenger` (
+  `passenger_id` int(11) NOT NULL,
+  `birth_date` date NOT NULL,
+  `gender` char(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `person` (
+  `person_id` int(11) NOT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `last_name` varchar(30) NOT NULL,
+  `phone_number` char(10) NOT NULL,
+  `email` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `pilot` (
+  `pilot_id` int(11) NOT NULL,
+  `pilot_hours` decimal(12,2) NOT NULL,
+  `cell_phone` char(10) NOT NULL,
+  `rank` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `plane_scheduled` (
+  `flight_id` int(11) NOT NULL,
+  `airplane_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `purchases` (
+  `ticket_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `seats_filled` (
+  `ticket_id` int(11) NOT NULL,
+  `flight_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `senior_scheduled` (
+  `crew_manifest_id` int(11) NOT NULL,
+  `senior_pilot_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ticket` (
+  `ticket_id` int(11) NOT NULL,
+  `seat_number` int(11) NOT NULL,
+  `price` decimal(7,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--------------------------------------------------
+Primary/Foreign Keys :
+--------------------------------------------------
+
+ALTER TABLE `airplane`
+  ADD PRIMARY KEY (`airplane_id`);
+  
+ALTER TABLE `airport`
+  ADD PRIMARY KEY (`airport_id`);
+
+ALTER TABLE `arrival`
+  ADD PRIMARY KEY (`flight_id`),
+  ADD KEY `airport_id` (`airport_id`);
+  
+ALTER TABLE `attendants_scheduled`
+  ADD PRIMARY KEY (`crew_manifest_id`),
+  ADD KEY `attendant_id` (`attendant_id1`),
+  ADD KEY `attendant_id2` (`attendant_id2`);
+  
+ALTER TABLE `copilot_scheduled`
+  ADD PRIMARY KEY (`crew_manifest_id`),
+  ADD KEY `pilot_id` (`copilot_id`);
+  
+ALTER TABLE `crew_manifest`
+  ADD PRIMARY KEY (`crew_manifest_id`);
+  
+ALTER TABLE `crew_scheduled`
+  ADD PRIMARY KEY (`flight_id`),
+  ADD KEY `crew_manifest_id` (`crew_manifest_id`);
+ 
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`customer_id`);
+  
+ALTER TABLE `departure`
+  ADD PRIMARY KEY (`flight_id`),
+  ADD KEY `airport_id` (`airport_id`);
+  
+ALTER TABLE `employee`
+  ADD PRIMARY KEY (`employee_id`);
+  
+ALTER TABLE `flight`
+  ADD PRIMARY KEY (`flight_id`);
+  
+ALTER TABLE `flight_attendant`
+  ADD PRIMARY KEY (`attendant_id`);
+  
+ALTER TABLE `has`
+  ADD PRIMARY KEY (`ticket_id`),
+  ADD KEY `passenger_id` (`passenger_id`);
+  
+ALTER TABLE `home_airport`
+  ADD PRIMARY KEY (`employee_id`),
+  ADD KEY `airport_id` (`airport_id`);
+  
+ALTER TABLE `lead_scheduled`
+  ADD PRIMARY KEY (`crew_manifest_id`),
+  ADD KEY `attendant_id` (`lead_attendant_id`);
+  
+ALTER TABLE `passenger`
+  ADD PRIMARY KEY (`passenger_id`);
+  
+ALTER TABLE `person`
+  ADD PRIMARY KEY (`person_id`);
+  
+ALTER TABLE `pilot`
+  ADD PRIMARY KEY (`pilot_id`);
+  
+ALTER TABLE `plane_scheduled`
+  ADD PRIMARY KEY (`flight_id`),
+  ADD KEY `airplane_id` (`airplane_id`);
+  
+ALTER TABLE `purchases`
+  ADD PRIMARY KEY (`ticket_id`),
+  ADD KEY `customer_id` (`customer_id`);
+  
+ALTER TABLE `seats_filled`
+  ADD PRIMARY KEY (`ticket_id`),
+  ADD KEY `flight_id` (`flight_id`);
+
+ALTER TABLE `senior_scheduled`
+  ADD PRIMARY KEY (`crew_manifest_id`),
+  ADD KEY `pilot_id` (`senior_pilot_id`);
+  
+ALTER TABLE `ticket`
+  ADD PRIMARY KEY (`ticket_id`);
+  
+ALTER TABLE `airplane`
+  MODIFY `airplane_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+ALTER TABLE `crew_manifest`
+  MODIFY `crew_manifest_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+ALTER TABLE `flight`
+  MODIFY `flight_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  
+ALTER TABLE `person`
+  MODIFY `person_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  
+ALTER TABLE `ticket`
+  MODIFY `ticket_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  
+ALTER TABLE `arrival`
+  ADD CONSTRAINT `arrival_ibfk_2` FOREIGN KEY (`airport_id`) REFERENCES `airport` (`airport_id`),
+  ADD CONSTRAINT `arrival_ibfk_3` FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`);
+  
+ALTER TABLE `attendants_scheduled`
+  ADD CONSTRAINT `attendants_scheduled_ibfk_2` FOREIGN KEY (`attendant_id1`) REFERENCES `flight_attendant` (`attendant_id`),
+  ADD CONSTRAINT `attendants_scheduled_ibfk_3` FOREIGN KEY (`attendant_id2`) REFERENCES `flight_attendant` (`attendant_id`),
+  ADD CONSTRAINT `attendants_scheduled_ibfk_4` FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`);
+  
+ALTER TABLE `copilot_scheduled`
+  ADD CONSTRAINT `copilot_scheduled_ibfk_2` FOREIGN KEY (`copilot_id`) REFERENCES `pilot` (`pilot_id`),
+  ADD CONSTRAINT `copilot_scheduled_ibfk_3` FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`);
+  
+ALTER TABLE `crew_scheduled`
+  ADD CONSTRAINT `crew_scheduled_ibfk_3` FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`),
+  ADD CONSTRAINT `crew_scheduled_ibfk_4` FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`);
+  
+ALTER TABLE `customer`
+  ADD CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `person` (`person_id`);
+  
+ALTER TABLE `departure`
+  ADD CONSTRAINT `departure_ibfk_2` FOREIGN KEY (`airport_id`) REFERENCES `airport` (`airport_id`),
+  ADD CONSTRAINT `departure_ibfk_3` FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`);
+  
+ALTER TABLE `employee`
+  ADD CONSTRAINT `employee_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `person` (`person_id`);
+  
+ALTER TABLE `flight_attendant`
+  ADD CONSTRAINT `flight_attendant_ibfk_1` FOREIGN KEY (`attendant_id`) REFERENCES `employee` (`employee_id`);
+  
+ALTER TABLE `has`
+  ADD CONSTRAINT `has_ibfk_2` FOREIGN KEY (`passenger_id`) REFERENCES `passenger` (`passenger_id`),
+  ADD CONSTRAINT `has_ibfk_3` FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`ticket_id`);
+  
+ALTER TABLE `home_airport`
+  ADD CONSTRAINT `home_airport_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`),
+  ADD CONSTRAINT `home_airport_ibfk_2` FOREIGN KEY (`airport_id`) REFERENCES `airport` (`airport_id`);
+  
+ALTER TABLE `lead_scheduled`
+  ADD CONSTRAINT `lead_scheduled_ibfk_2` FOREIGN KEY (`lead_attendant_id`) REFERENCES `flight_attendant` (`attendant_id`),
+  ADD CONSTRAINT `lead_scheduled_ibfk_3` FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`);
+  
+ALTER TABLE `passenger`
+  ADD CONSTRAINT `passenger_ibfk_1` FOREIGN KEY (`passenger_id`) REFERENCES `person` (`person_id`);
+  
+ALTER TABLE `pilot`
+  ADD CONSTRAINT `pilot_ibfk_1` FOREIGN KEY (`pilot_id`) REFERENCES `employee` (`employee_id`);
+  
+ALTER TABLE `plane_scheduled`
+  ADD CONSTRAINT `plane_scheduled_ibfk_2` FOREIGN KEY (`airplane_id`) REFERENCES `airplane` (`airplane_id`),
+  ADD CONSTRAINT `plane_scheduled_ibfk_3` FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`);
+  
+ALTER TABLE `purchases`
+  ADD CONSTRAINT `purchases_ibfk_3` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
+  ADD CONSTRAINT `purchases_ibfk_4` FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`ticket_id`);
+  
+ALTER TABLE `seats_filled`
+  ADD CONSTRAINT `seats_filled_ibfk_3` FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`ticket_id`),
+  ADD CONSTRAINT `seats_filled_ibfk_4` FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`);
+  
+ALTER TABLE `senior_scheduled`
+  ADD CONSTRAINT `senior_scheduled_ibfk_2` FOREIGN KEY (`senior_pilot_id`) REFERENCES `pilot` (`pilot_id`),
+  ADD CONSTRAINT `senior_scheduled_ibfk_3` FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`);
+  
+---------------------------------------------------------------
+Inserts :
+---------------------------------------------------------------  
+  
+INSERT INTO `airplane` (`airplane_id`, `make`, `model`, `factory_date`, `miles`, `passenger_capacity`) VALUES
+(1, 'Boeing', '707', '2016-12-01', 500, 140),
+(2, 'Boeing', '727', '2016-11-09', 2000, 150),
+(3, 'Airbus', '170', '2014-12-01', 150000, 300),
+(4, 'Embraer', '300', '2015-12-01', 6000, 80),
+(5, 'Bombardier', '700', '2013-12-01', 20000, 70),
+(6, 'EMBRAER', '737', '1993-10-16', 93424, 169),
+(7, 'Tupoloev', '787', '1977-03-06', 97932, 133),
+(8, 'BOMBARDIER', '747', '2014-01-26', 29143, 139),
+(9, 'Tupoloev', 'A321', '1959-09-03', 17995, 130),
+(10, 'Tupoloev', '737', '2010-10-12', 90345, 83),
+(11, 'EMBRAER', '737', '1995-12-08', 18586, 90),
+(12, 'BOEING', 'Tu-144D', '1950-08-14', 46157, 102),
+(13, 'Tupoloev', '777', '2005-10-08', 41425, 187),
+(14, 'Tupoloev', 'A320', '1961-02-05', 48127, 190),
+(15, 'EMBRAER', 'A318', '2002-06-04', 3473, 97),
+(16, 'EMBRAER', 'A321', '2008-07-26', 19837, 87),
+(17, 'BOMBARDIER', 'A318', '1986-06-22', 57690, 135),
+(18, 'BOEING', '190', '1987-09-02', 85121, 174),
+(19, 'Tupoloev', 'Tu-144D', '1988-01-13', 78604, 185),
+(20, 'Tupoloev', '767', '1995-10-08', 65282, 127);
+
+INSERT INTO `airport` (`airport_id`, `city`, `state`) VALUES
+('AGS', 'Augusta', 'GA'),
+('ATL', 'Atlanta', 'GA'),
+('BDL', 'Hartford', 'CT'),
+('BHM', 'Birmingham', 'AL'),
+('CGX', 'Chicago', 'IL'),
+('DFW', 'Dallas', 'TX'),
+('DHM', 'Dothan', 'AL'),
+('FLG', 'Flagstaff', 'AZ'),
+('FYV', 'Fayetteville', 'AR'),
+('HSV', 'Huntsville', 'AL'),
+('LAX', 'Los Angeles', 'CA'),
+('LIT', 'Little Rock', 'AR'),
+('MGM', 'Montgomery', 'AL'),
+('MOB', 'Mobile', 'AL'),
+('OMA', 'Omaha', 'NE'),
+('PDX', 'Portland', 'OR'),
+('PHX', 'Phoenix', 'AZ'),
+('SAV', 'Savannah', 'GA'),
+('TUS', 'Tucson', 'AZ'),
+('YUM', 'Yuma', 'AZ');
+
+INSERT INTO `flight` (`flight_id`, `departure_date`, `departure_time`, `arrival_date`, `arrival_time`) VALUES
+(1, '2017-03-01', '09:00:00', '2017-03-01', '13:00:00'),
+(2, '2017-03-02', '05:00:00', '2017-03-02', '12:15:00'),
+(3, '2017-03-03', '04:00:00', '2017-03-03', '13:00:00'),
+(4, '2017-03-04', '15:18:00', '2017-03-04', '18:11:00'),
+(5, '2017-03-05', '09:09:00', '2017-03-05', '16:22:00'),
+(6, '2017-11-26', '12:31:00', '2017-11-26', '16:06:00'),
+(7, '2017-05-28', '06:50:00', '2017-05-28', '09:02:00'),
+(8, '2017-12-27', '14:12:00', '2017-12-27', '18:51:00'),
+(9, '2017-04-17', '01:45:00', '2017-04-17', '01:45:00'),
+(10, '2017-04-17', '05:12:00', '2017-04-17', '08:24:00'),
+(11, '2017-03-28', '16:46:00', '2017-03-28', '18:24:00'),
+(12, '2017-03-21', '12:45:00', '2017-03-21', '12:30:00'),
+(13, '2017-11-05', '05:48:00', '2017-11-05', '05:57:00'),
+(14, '2017-04-01', '18:11:00', '2017-04-01', '18:16:00'),
+(15, '2017-04-05', '09:45:00', '2017-04-05', '10:32:00'),
+(16, '2017-05-08', '10:21:00', '2017-05-08', '12:21:00'),
+(17, '2017-06-19', '12:53:00', '2017-06-19', '15:38:00'),
+(18, '2017-09-26', '14:36:00', '2017-09-26', '16:57:00'),
+(19, '2017-10-25', '10:25:00', '2017-10-25', '11:17:00'),
+(20, '2017-06-21', '00:27:00', '2017-06-21', '04:15:00');
+
+INSERT INTO `ticket` (`ticket_id`, `seat_number`, `price`) VALUES
+(1, 1, '452.35'),
+(2, 1, '366.42'),
+(3, 1, '225.25'),
+(4, 1, '178.92'),
+(5, 1, '678.12'),
+(6, 51, '217.36'),
+(7, 2, '510.20'),
+(8, 26, '400.60'),
+(9, 36, '438.65'),
+(10, 70, '416.20'),
+(11, 51, '639.32'),
+(12, 45, '372.30'),
+(13, 12, '207.21'),
+(14, 50, '471.40'),
+(15, 11, '496.44'),
+(16, 25, '270.87'),
+(17, 17, '445.78'),
+(18, 68, '622.32'),
+(19, 45, '602.97'),
+(20, 25, '752.71'),
+(21, 1, '736.30'),
+(22, 2, '418.75'),
+(23, 3, '513.20'),
+(24, 4, '324.86'),
+(25, 5, '324.69'),
+(26, 6, '195.31'),
+(27, 7, '663.20'),
+(28, 8, '552.24'),
+(29, 9, '272.16'),
+(30, 10, '723.71'),
+(31, 11, '379.48'),
+(32, 12, '459.43'),
+(33, 13, '745.66'),
+(34, 14, '554.61'),
+(35, 15, '262.60'),
+(36, 16, '766.84'),
+(37, 17, '295.23'),
+(38, 18, '413.58'),
+(39, 19, '678.66'),
+(40, 20, '424.78');
+
+INSERT INTO `plane_scheduled` (`flight_id`, `airplane_id`) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10),
+(11, 11),
+(12, 12),
+(13, 13),
+(14, 14),
+(15, 15),
+(16, 16),
+(17, 17),
+(18, 18),
+(19, 19),
+(20, 20);
+
+INSERT INTO `arrival` (`flight_id`, `airport_id`) VALUES
+(19, 'AGS'),
+(18, 'ATL'),
+(17, 'BDL'),
+(6, 'BHM'),
+(1, 'CGX'),
+(4, 'DFW'),
+(7, 'DHM'),
+(11, 'FLG'),
+(15, 'FYV'),
+(8, 'HSV'),
+(5, 'LAX'),
+(16, 'LIT'),
+(10, 'MGM'),
+(9, 'MOB'),
+(2, 'OMA'),
+(3, 'PDX'),
+(12, 'PHX'),
+(20, 'SAV'),
+(13, 'TUS'),
+(14, 'YUM');
+
+INSERT INTO `departure` (`flight_id`, `airport_id`) VALUES
+(18, 'AGS'),
+(17, 'ATL'),
+(16, 'BDL'),
+(20, 'BHM'),
+(3, 'CGX'),
+(1, 'DFW'),
+(6, 'DHM'),
+(10, 'FLG'),
+(14, 'FYV'),
+(7, 'HSV'),
+(2, 'LAX'),
+(15, 'LIT'),
+(9, 'MGM'),
+(8, 'MOB'),
+(4, 'OMA'),
+(5, 'PDX'),
+(11, 'PHX'),
+(19, 'SAV'),
+(12, 'TUS'),
+(13, 'YUM');
+
+INSERT INTO `person` (`person_id`, `first_name`, `last_name`, `phone_number`, `email`) VALUES
+(1, 'Matt', 'Smith', '4025555555', 'msmith@mail.com'),
+(2, 'Cindy', 'Smith', '4025555556', 'csmith@mail.com'),
+(3, 'James', 'Miles', '5415555555', 'jmiles@mail.com'),
+(4, 'Tiffany', 'Zorinsky', '5419541313', 'tzorinsky@mail.com'),
+(5, 'Andrew', 'Smith', '5412356464', 'asmith@mail.com'),
+(6, 'Bob', 'Thorne', '2105555555', 'bthorne@mail.com'),
+(7, 'Catherine', 'Ward', '2105555564', 'cward@mail.com'),
+(8, 'Kyle', 'Foreman', '2105555557', 'kforeman@mail.com'),
+(9, 'Andrea', 'Swift', '4021231234', 'aswift@mail.com'),
+(10, 'Tom', 'Stevens', '4024567895', 'tstevens@mail.com'),
+(11, 'Kevin', 'Flaning', '5418587878', 'kflaning@mail.com'),
+(12, 'Beatrice', 'Owens', '2105123456', 'bowens@mail.com'),
+(13, 'Mark', 'Trudeau', '1354446655', 'mtrudeau@mail.com'),
+(14, 'Jennifer', 'Costan', '4021239874', 'jcostan@mail.com'),
+(15, 'John', 'Kent', '9784561212', 'jkent@mail.com'),
+(16, 'Stuart', 'Fisk', '6541239898', 'sfisk@mail.com'),
+(17, 'Samantha', 'Dolores', '1112223344', 'sdolores@mail.com'),
+(18, 'James', 'Jones', '7442211403', 'JamesJones@mail.com'),
+(19, 'Sandra', 'Jones', '9923623598', 'SandraJones@mail.com'),
+(20, 'Joseph', 'Harris', '2823591688', 'JosephHarris@mail.com'),
+(21, 'Patricia', 'Miller', '3011196215', 'PatriciaMiller@mail.com'),
+(22, 'William', 'Miller', '5342213243', 'WilliamMiller@mail.com'),
+(23, 'Ruth', 'Taylor', '8745007031', 'RuthTaylor@mail.com'),
+(24, 'Robert', 'White', '6379222737', 'RobertWhite@mail.com'),
+(25, 'Maria', 'Taylor', '1926864983', 'MariaTaylor@mail.com'),
+(26, 'David', 'Williams', '9866627281', 'DavidWilliams@mail.com'),
+(27, 'Ruth', 'Johnson', '7513057495', 'RuthJohnson@mail.com'),
+(28, 'George', 'Anderson', '5214596794', 'GeorgeAnderson@mail.com'),
+(29, 'Ruth', 'Jackson', '8532466769', 'RuthJackson@mail.com'),
+(30, 'Thomas', 'Robinson', '7527789723', 'ThomasRobinson@mail.com'),
+(31, 'Ruth', 'Smith', '3432296606', 'RuthSmith@mail.com'),
+(32, 'Richard', 'Taylor', '9304759887', 'RichardTaylor@mail.com'),
+(33, 'Donna', 'Anderson', '7194525478', 'DonnaAnderson@mail.com'),
+(34, 'Mark', 'Smith', '1359304535', 'MarkSmith@mail.com'),
+(35, 'Donna', 'White', '4636671016', 'DonnaWhite@mail.com'),
+(36, 'Kenneth', 'Martin', '3063045266', 'KennethMartin@mail.com'),
+(37, 'Mary', 'Thomas', '5487069190', 'MaryThomas@mail.com'),
+(38, 'Thomas', 'Moore', '1452637692', 'ThomasMoore@mail.com'),
+(39, 'Karen', 'Moore', '4881921927', 'KarenMoore@mail.com'),
+(40, 'Paul', 'Martinez', '6292958990', 'PaulMartinez@mail.com'),
+(41, 'Carol', 'Martin', '3108808534', 'CarolMartin@mail.com'),
+(42, 'Thomas', 'Martin', '2336473224', 'ThomasMartin@mail.com'),
+(43, 'Donna', 'Robinson', '6558471461', 'DonnaRobinson@mail.com'),
+(44, 'Michael', 'Jones', '7857388327', 'MichaelJones@mail.com'),
+(45, 'Patricia', 'Taylor', '2203532096', 'PatriciaTaylor@mail.com'),
+(46, 'Edward', 'Davis', '1157953961', 'EdwardDavis@mail.com'),
+(47, 'Barbara', 'White', '1136371895', 'BarbaraWhite@mail.com'),
+(48, 'Kenneth', 'Martin', '8976403458', 'KennethMartin@mail.com'),
+(49, 'Maria', 'Martin', '6143475178', 'MariaMartin@mail.com'),
+(50, 'Edward', 'Brown', '1791655567', 'EdwardBrown@mail.com'),
+(51, 'Donna', 'Thompson', '9792697518', 'DonnaThompson@mail.com'),
+(52, 'James', 'Martin', '5733723549', 'JamesMartin@mail.com'),
+(53, 'Jennifer', 'Williams', '1643995541', 'JenniferWilliams@mail.com'),
+(54, 'George', 'Jones', '6524569268', 'GeorgeJones@mail.com'),
+(55, 'Susan', 'Robinson', '4861448526', 'SusanRobinson@mail.com'),
+(56, 'Charles', 'Anderson', '4179979543', 'CharlesAnderson@mail.com'),
+(57, 'Karen', 'Smith', '1487772177', 'KarenSmith@mail.com'),
+(58, 'Christopher', 'Brown', '8919063847', 'ChristopherBrown@mail.com'),
+(59, 'Barbara', 'Garcia', '7695102154', 'BarbaraGarcia@mail.com'),
+(60, 'Michael', 'White', '9418715701', 'MichaelWhite@mail.com'),
+(61, 'Sharon', 'Jones', '7806291774', 'SharonJones@mail.com'),
+(62, 'Joseph', 'Anderson', '9144591887', 'JosephAnderson@mail.com'),
+(63, 'Lisa', 'Martinez', '8549804808', 'LisaMartinez@mail.com'),
+(64, 'Donald', 'Martin', '1857166144', 'DonaldMartin@mail.com'),
+(65, 'Margaret', 'Williams', '3323441305', 'MargaretWilliams@mail.com'),
+(66, 'Edward', 'Martin', '2493192749', 'EdwardMartin@mail.com'),
+(67, 'Patricia', 'Wilson', '2013997890', 'PatriciaWilson@mail.com'),
+(68, 'Michael', 'Miller', '8622268894', 'MichaelMiller@mail.com'),
+(69, 'Lisa', 'Moore', '2006699583', 'LisaMoore@mail.com'),
+(70, 'Richard', 'Garcia', '4828651656', 'RichardGarcia@mail.com'),
+(71, 'Susan', 'Miller', '9545751495', 'SusanMiller@mail.com'),
+(72, 'Steven', 'Martin', '2781274458', 'StevenMartin@mail.com'),
+(73, 'Maria', 'Johnson', '6143109868', 'MariaJohnson@mail.com'),
+(74, 'Paul', 'Smith', '1476984317', 'PaulSmith@mail.com'),
+(75, 'Maria', 'Wilson', '2521897662', 'MariaWilson@mail.com'),
+(76, 'Joseph', 'Johnson', '3572308418', 'JosephJohnson@mail.com'),
+(77, 'Carol', 'Martin', '6444019351', 'CarolMartin@mail.com'),
+(78, 'Richard', 'Davis', '4998861154', 'RichardDavis@mail.com'),
+(79, 'Jennifer', 'White', '7295537812', 'JenniferWhite@mail.com'),
+(80, 'Edward', 'Garcia', '9403573900', 'EdwardGarcia@mail.com'),
+(81, 'Susan', 'Miller', '8097096763', 'SusanMiller@mail.com'),
+(82, 'Charles', 'Moore', '4931880060', 'CharlesMoore@mail.com'),
+(83, 'Carol', 'Moore', '5298381866', 'CarolMoore@mail.com'),
+(84, 'Thomas', 'Martinez', '7965885328', 'ThomasMartinez@mail.com'),
+(85, 'Patricia', 'Thomas', '2403932664', 'PatriciaThomas@mail.com'),
+(86, 'Michael', 'Robinson', '5561981218', 'MichaelRobinson@mail.com'),
+(87, 'Sharon', 'Smith', '5373545987', 'SharonSmith@mail.com'),
+(88, 'Joseph', 'Miller', '6006541190', 'JosephMiller@mail.com'),
+(89, 'Sharon', 'Wilson', '8198455037', 'SharonWilson@mail.com'),
+(90, 'Edward', 'Martinez', '1923347031', 'EdwardMartinez@mail.com'),
+(91, 'Betty', 'Moore', '9781754673', 'BettyMoore@mail.com'),
+(92, 'Robert', 'Thompson', '5481753040', 'RobertThompson@mail.com'),
+(93, 'Donna', 'Brown', '1843039769', 'DonnaBrown@mail.com'),
+(94, 'Joseph', 'Taylor', '6731173601', 'JosephTaylor@mail.com'),
+(95, 'Margaret', 'Garcia', '2824911836', 'MargaretGarcia@mail.com'),
+(96, 'Brian', 'Martinez', '9971798930', 'BrianMartinez@mail.com'),
+(97, 'Donna', 'Wilson', '3045602619', 'DonnaWilson@mail.com'),
+(98, 'Edward', 'Moore', '5027883352', 'EdwardMoore@mail.com'),
+(99, 'Margaret', 'Robinson', '7232753203', 'MargaretRobinson@mail.com');
+
+INSERT INTO `employee` (`employee_id`, `birth_date`, `gender`, `street_number`, `street_name`, `apt_number`, `city`, `state`, `zip`, `start_date`, `salary`) VALUES
+(3, '1970-03-12', 'M', '110', 'Dodge Ave', NULL, 'Portland', 'OR', '97035', '2010-01-01', '120000.00'),
+(4, '1989-03-12', 'F', '602', 'Pacific st', NULL, 'Portland', 'OR', '97202', '2014-01-01', '80321.00'),
+(6, '1974-03-12', 'M', '45', 'Lone Star dr', NULL, 'Dallas', 'TX', '75001', '2012-01-01', '55120.13'),
+(7, '1992-03-12', 'F', '1311', 'Franklin blvd', '12', 'Dallas', 'TX', '75001', '2015-01-01', '45018.13'),
+(8, '1995-03-12', 'M', '9987', 'Turner cr', NULL, 'Dallas', 'TX', '75001', '2017-01-01', '38052.88'),
+(13, '1976-04-05', 'M', '123', 'Douglas st', NULL, 'Gainesville', 'FL', '32601', '1990-06-04', '75432.88'),
+(14, '1976-04-03', 'F', '123', 'Pine st', NULL, 'Flint', 'MI', '48501', '1995-07-04', '74002.88'),
+(15, '1972-08-07', 'M', '8712', 'Maple st', NULL, 'San Antonio', 'TX', '78283', '1995-06-04', '113452.88'),
+(16, '1968-08-07', 'M', '7128', 'Brooke st', NULL, 'Salem', 'MA', '01915', '1990-06-04', '102154.88'),
+(17, '1971-08-07', 'F', '3345', 'Pineapple st', NULL, 'Phoenix', 'AZ', '85003', '1998-06-04', '98725.88'),
+(32, '1988-10-08', 'M', '1135', 'Park st', NULL, 'Birmingham', 'AL', '26101', '2001-04-08', '154430.98'),
+(33, '1964-02-11', 'F', '9355', 'Second st', NULL, 'Dothan', 'AL', '64270', '1993-03-11', '90466.20'),
+(34, '1931-02-12', 'M', '5737', 'Third st', NULL, 'Huntsville', 'AL', '70428', '2016-07-13', '162519.50'),
+(35, '1961-08-08', 'F', '9445', 'First st', NULL, 'Mobile', 'AL', '90921', '2003-05-07', '45098.66'),
+(36, '1931-06-01', 'M', '5609', 'Fourth st', NULL, 'Montgomery', 'AL', '85010', '1997-02-26', '55012.97'),
+(37, '1931-06-13', 'F', '8916', 'Fifth st', NULL, 'Flagstaff', 'AZ', '43246', '2006-11-20', '55763.79'),
+(38, '1929-06-09', 'M', '4160', 'Main st', NULL, 'Phoenix', 'AZ', '54079', '1994-04-06', '94779.69'),
+(39, '1941-05-17', 'F', '4359', 'Sixth st', NULL, 'Tucson', 'AZ', '18559', '2016-01-23', '64729.52'),
+(40, '1950-01-06', 'M', '7542', 'Oak st', NULL, 'Yuma', 'AZ', '30555', '2016-04-18', '160960.18'),
+(41, '1951-04-28', 'F', '3541', 'Seventh st', NULL, 'Fayetteville', 'AR', '24509', '2014-02-22', '193560.48'),
+(42, '1968-10-13', 'M', '8140', 'Pine st', NULL, 'Little Rock', 'AR', '11586', '1993-07-01', '160102.94'),
+(43, '1960-01-08', 'F', '9671', 'Maple st', NULL, 'Hartford', 'CT', '90023', '2004-07-12', '133903.44'),
+(44, '1917-06-18', 'M', '9332', 'Cedar st', NULL, 'Atlanta', 'GA', '38213', '2015-06-19', '47747.28'),
+(45, '1923-03-19', 'F', '812', 'Eighth st', NULL, 'Augusta', 'GA', '91296', '2002-07-25', '91824.87'),
+(46, '1976-08-24', 'M', '9865', 'Elm st', NULL, 'Savannah', 'GA', '25486', '2016-03-25', '173523.98'),
+(47, '1972-06-08', 'F', '2874', 'View st', NULL, 'Birmingham', 'AL', '17969', '1989-02-10', '194926.13'),
+(48, '1921-02-22', 'M', '1058', 'Washington st', NULL, 'Dothan', 'AL', '82607', '2009-11-12', '142451.35'),
+(49, '1921-08-01', 'F', '6087', 'Ninth st', NULL, 'Huntsville', 'AL', '34488', '1988-04-08', '65003.40'),
+(50, '1970-12-13', 'M', '8770', 'Lake st', NULL, 'Mobile', 'AL', '10535', '2004-09-20', '164416.61'),
+(51, '1989-12-03', 'F', '8143', 'Hill st', NULL, 'Montgomery', 'AL', '71180', '2001-04-10', '110717.41'),
+(52, '1926-07-15', 'M', '9863', 'Park st', NULL, 'Flagstaff', 'AZ', '46738', '2012-05-25', '173611.39'),
+(53, '1952-01-18', 'F', '3829', 'Second st', NULL, 'Phoenix', 'AZ', '85550', '2004-10-13', '100380.81'),
+(54, '1938-03-21', 'M', '6560', 'Third st', NULL, 'Tucson', 'AZ', '98380', '2006-07-04', '171627.50'),
+(55, '1969-01-15', 'F', '8101', 'First st', NULL, 'Yuma', 'AZ', '52381', '1991-07-15', '98826.70'),
+(56, '1934-10-28', 'M', '2148', 'Fourth st', NULL, 'Fayetteville', 'AR', '70161', '1997-06-12', '196343.87'),
+(57, '1952-09-10', 'F', '881', 'Fifth st', NULL, 'Little Rock', 'AR', '11813', '1988-03-05', '131239.60'),
+(58, '1935-05-05', 'M', '6357', 'Main st', NULL, 'Hartford', 'CT', '78164', '2011-05-25', '53278.80'),
+(59, '1989-01-13', 'F', '864', 'Sixth st', NULL, 'Atlanta', 'GA', '47653', '1994-04-05', '90528.43'),
+(60, '1933-09-18', 'M', '7268', 'Oak st', NULL, 'Augusta', 'GA', '21418', '2003-02-19', '52309.65'),
+(61, '1981-05-11', 'F', '405', 'Seventh st', NULL, 'Savannah', 'GA', '62508', '1993-02-02', '134420.61'),
+(62, '1965-08-06', 'M', '1809', 'Pine st', NULL, 'Birmingham', 'AL', '67857', '1999-12-23', '77291.78'),
+(63, '1967-12-28', 'F', '2088', 'Maple st', NULL, 'Dothan', 'AL', '53887', '2014-11-11', '86370.20'),
+(64, '1943-12-17', 'M', '4162', 'Cedar st', NULL, 'Huntsville', 'AL', '59746', '1991-02-26', '189052.34'),
+(65, '1981-04-21', 'F', '5337', 'Eighth st', NULL, 'Mobile', 'AL', '18057', '2011-10-09', '70657.90'),
+(66, '1919-05-10', 'M', '2490', 'Elm st', NULL, 'Montgomery', 'AL', '42272', '2004-01-10', '186808.42'),
+(67, '1929-06-16', 'F', '1380', 'View st', NULL, 'Flagstaff', 'AZ', '14222', '2002-01-10', '182301.60'),
+(68, '1962-04-06', 'M', '8609', 'Washington st', NULL, 'Phoenix', 'AZ', '78268', '1998-07-06', '76400.88'),
+(69, '1985-12-14', 'F', '9758', 'Ninth st', NULL, 'Tucson', 'AZ', '68478', '2007-07-10', '53387.50'),
+(70, '1927-05-01', 'M', '9604', 'Lake st', NULL, 'Yuma', 'AZ', '35399', '2013-01-16', '132596.42'),
+(71, '1969-05-24', 'F', '3557', 'Hill st', NULL, 'Fayetteville', 'AR', '27779', '1996-11-15', '192689.92'),
+(72, '1943-11-13', 'M', '5917', 'Park st', NULL, 'Little Rock', 'AR', '70227', '1990-12-06', '150915.77'),
+(73, '1919-10-10', 'F', '1325', 'Second st', NULL, 'Hartford', 'CT', '80871', '1990-06-25', '119437.18'),
+(74, '1922-01-19', 'M', '2407', 'Third st', NULL, 'Atlanta', 'GA', '61221', '1987-08-10', '147480.25'),
+(75, '1925-11-14', 'F', '3759', 'First st', NULL, 'Augusta', 'GA', '77396', '1992-05-23', '191976.37'),
+(76, '1945-09-14', 'M', '2840', 'Fourth st', NULL, 'Savannah', 'GA', '35258', '1992-03-02', '118333.51'),
+(77, '1959-05-09', 'F', '9875', 'Fifth st', NULL, 'Birmingham', 'AL', '70809', '2011-01-21', '63695.79'),
+(78, '1941-09-02', 'M', '6104', 'Main st', NULL, 'Dothan', 'AL', '92597', '2016-01-12', '52622.74'),
+(79, '1926-03-15', 'F', '5768', 'Sixth st', NULL, 'Huntsville', 'AL', '44854', '2001-07-17', '72317.31'),
+(80, '1927-06-05', 'M', '9635', 'Oak st', NULL, 'Mobile', 'AL', '76723', '1988-12-01', '98365.52'),
+(81, '1960-04-17', 'F', '4706', 'Park st', NULL, 'Birmingham', 'AL', '57755', '2009-08-24', '187438.91'),
+(82, '1974-06-26', 'M', '6829', 'Second st', NULL, 'Dothan', 'AL', '11588', '1990-07-20', '68630.90'),
+(83, '1982-01-18', 'F', '8502', 'Third st', NULL, 'Huntsville', 'AL', '20143', '1995-10-20', '94964.98'),
+(84, '1951-11-06', 'M', '9662', 'First st', NULL, 'Mobile', 'AL', '35071', '2008-02-22', '102283.43'),
+(85, '1977-04-06', 'F', '6064', 'Fourth st', NULL, 'Montgomery', 'AL', '47318', '2009-09-14', '89745.43'),
+(86, '1944-12-13', 'M', '1564', 'Fifth st', NULL, 'Flagstaff', 'AZ', '36118', '1989-04-24', '64595.61'),
+(87, '1934-01-12', 'F', '2478', 'Main st', NULL, 'Phoenix', 'AZ', '29090', '2015-08-23', '197376.70'),
+(88, '1928-07-11', 'M', '8454', 'Sixth st', NULL, 'Tucson', 'AZ', '93425', '2011-10-13', '181211.45'),
+(89, '1941-04-11', 'F', '4388', 'Oak st', NULL, 'Yuma', 'AZ', '21057', '1993-04-10', '122651.22'),
+(90, '1929-01-06', 'M', '7947', 'Seventh st', NULL, 'Fayetteville', 'AR', '90343', '2016-12-22', '142876.17'),
+(91, '1941-04-14', 'F', '1724', 'Pine st', NULL, 'Little Rock', 'AR', '30294', '1996-07-02', '158580.51'),
+(92, '1974-05-20', 'M', '9791', 'Maple st', NULL, 'Hartford', 'CT', '27924', '2010-12-05', '76379.65'),
+(93, '1932-02-13', 'F', '8748', 'Cedar st', NULL, 'Atlanta', 'GA', '89879', '2012-12-21', '111542.90'),
+(94, '1967-06-09', 'M', '570', 'Eighth st', NULL, 'Augusta', 'GA', '43126', '1991-10-25', '185741.78'),
+(95, '1930-09-27', 'F', '5882', 'Elm st', NULL, 'Savannah', 'GA', '61937', '2001-05-08', '94865.67'),
+(96, '1954-03-18', 'M', '4161', 'View st', NULL, 'Birmingham', 'AL', '63542', '1989-05-10', '107695.11'),
+(97, '1947-09-03', 'F', '9364', 'Washington st', NULL, 'Dothan', 'AL', '69718', '2001-04-19', '120522.10'),
+(98, '1940-11-02', 'M', '5871', 'Ninth st', NULL, 'Huntsville', 'AL', '26242', '2006-10-27', '83330.24'),
+(99, '1954-07-12', 'F', '6342', 'Lake st', NULL, 'Mobile', 'AL', '51416', '2003-12-25', '147689.43');
+
+INSERT INTO `pilot` (`pilot_id`, `pilot_hours`, `cell_phone`, `rank`) VALUES
+(3, '1200.00', '5415555555', 'senior'),
+(4, '300.00', '5419541313', 'entry'),
+(15, '3012.00', '9784561212', 'senior'),
+(16, '4534.00', '6541239898', 'senior'),
+(17, '2999.00', '1112223344', 'senior'),
+(32, '3094.00', '9367100211', 'senior'),
+(33, '3540.00', '7034302335', 'senior'),
+(34, '3990.00', '9033269602', 'senior'),
+(35, '3139.00', '4105621664', 'senior'),
+(36, '4294.00', '5091307924', 'senior'),
+(37, '3846.00', '2315246457', 'senior'),
+(38, '4493.00', '3335211126', 'senior'),
+(39, '3576.00', '5509552125', 'senior'),
+(40, '4682.00', '3669876197', 'senior'),
+(41, '3325.00', '8686990376', 'senior'),
+(42, '1286.00', '5153898521', 'entry'),
+(43, '2051.00', '6113594357', 'entry'),
+(44, '1268.00', '2084836559', 'entry'),
+(45, '2212.00', '2302490088', 'entry'),
+(46, '2370.00', '8256800020', 'entry'),
+(47, '1952.00', '6296020424', 'entry'),
+(48, '2263.00', '1203904273', 'entry'),
+(49, '1173.00', '7248536949', 'entry'),
+(50, '1797.00', '4626686061', 'entry'),
+(51, '2073.00', '2353924385', 'entry');
+
+INSERT INTO `flight_attendant` (`attendant_id`, `flight_hours`, `cell_phone`, `rank`) VALUES
+(6, '3000.00', '210555555', 'senior'),
+(7, '562.00', '210555556', 'entry'),
+(8, '20.00', '2105555557', 'entry'),
+(13, '6002.00', '1354446655', 'senior'),
+(14, '4535.00', '4021239874', 'senior'),
+(52, '2337.00', '1531842011', 'senior'),
+(53, '2158.00', '3083062300', 'senior'),
+(54, '2593.00', '2873954540', 'senior'),
+(55, '2559.00', '9874918201', 'senior'),
+(56, '2031.00', '7893937485', 'senior'),
+(57, '1569.00', '6345685360', 'senior'),
+(58, '2107.00', '3169817249', 'senior'),
+(59, '1983.00', '8045404592', 'senior'),
+(60, '2920.00', '6706093198', 'senior'),
+(61, '2403.00', '6562770863', 'senior'),
+(62, '2459.00', '6112685241', 'senior'),
+(63, '2220.00', '2076169313', 'senior'),
+(64, '1433.00', '7778489588', 'senior'),
+(65, '1690.00', '5317948599', 'senior'),
+(66, '1021.00', '2051792747', 'senior'),
+(67, '900.00', '4471546112', 'entry'),
+(68, '1447.00', '3206661562', 'senior'),
+(69, '1040.00', '3717018254', 'senior'),
+(70, '1413.00', '4571923134', 'senior'),
+(71, '1067.00', '7829408438', 'senior'),
+(72, '1117.00', '5667200070', 'senior'),
+(73, '748.00', '5727004958', 'entry'),
+(74, '928.00', '9913662165', 'entry'),
+(75, '797.00', '8276955793', 'entry'),
+(76, '17.00', '1639645995', 'entry'),
+(77, '1737.00', '4706464026', 'senior'),
+(78, '260.00', '7171245018', 'entry'),
+(79, '463.00', '9927690528', 'entry'),
+(80, '767.00', '8653175437', 'entry'),
+(81, '2624.00', '5697742925', 'senior'),
+(82, '1659.00', '6375802626', 'senior'),
+(83, '2911.00', '6387081815', 'senior'),
+(84, '2238.00', '1597742972', 'senior'),
+(85, '1783.00', '8941792428', 'senior'),
+(86, '1031.00', '1724429978', 'senior'),
+(87, '2780.00', '2469175893', 'senior'),
+(88, '2706.00', '3261130653', 'senior'),
+(89, '1244.00', '6254991976', 'senior'),
+(90, '2672.00', '5083479157', 'senior'),
+(91, '503.00', '5426689051', 'entry'),
+(92, '1751.00', '7486018152', 'senior'),
+(93, '528.00', '3196721928', 'entry'),
+(94, '1551.00', '4363326231', 'senior'),
+(95, '1834.00', '5035109752', 'senior'),
+(96, '337.00', '5411178473', 'entry'),
+(97, '605.00', '4791702081', 'entry'),
+(98, '1480.00', '6221454812', 'senior'),
+(99, '1912.00', '1368769615', 'senior');
+
+INSERT INTO `home_airport` (`employee_id`, `airport_id`) VALUES
+(45, 'AGS'),
+(60, 'AGS'),
+(75, 'AGS'),
+(94, 'AGS'),
+(44, 'ATL'),
+(59, 'ATL'),
+(74, 'ATL'),
+(93, 'ATL'),
+(43, 'BDL'),
+(58, 'BDL'),
+(73, 'BDL'),
+(92, 'BDL'),
+(32, 'BHM'),
+(47, 'BHM'),
+(62, 'BHM'),
+(77, 'BHM'),
+(81, 'BHM'),
+(96, 'BHM'),
+(13, 'CGX'),
+(6, 'DFW'),
+(7, 'DFW'),
+(8, 'DFW'),
+(14, 'DFW'),
+(33, 'DHM'),
+(48, 'DHM'),
+(63, 'DHM'),
+(78, 'DHM'),
+(82, 'DHM'),
+(97, 'DHM'),
+(37, 'FLG'),
+(52, 'FLG'),
+(67, 'FLG'),
+(86, 'FLG'),
+(41, 'FYV'),
+(56, 'FYV'),
+(71, 'FYV'),
+(90, 'FYV'),
+(34, 'HSV'),
+(49, 'HSV'),
+(64, 'HSV'),
+(79, 'HSV'),
+(83, 'HSV'),
+(98, 'HSV'),
+(15, 'LAX'),
+(42, 'LIT'),
+(57, 'LIT'),
+(72, 'LIT'),
+(91, 'LIT'),
+(36, 'MGM'),
+(51, 'MGM'),
+(66, 'MGM'),
+(85, 'MGM'),
+(35, 'MOB'),
+(50, 'MOB'),
+(65, 'MOB'),
+(80, 'MOB'),
+(84, 'MOB'),
+(99, 'MOB'),
+(16, 'OMA'),
+(3, 'PDX'),
+(4, 'PDX'),
+(17, 'PDX'),
+(38, 'PHX'),
+(53, 'PHX'),
+(68, 'PHX'),
+(87, 'PHX'),
+(46, 'SAV'),
+(61, 'SAV'),
+(76, 'SAV'),
+(95, 'SAV'),
+(39, 'TUS'),
+(54, 'TUS'),
+(69, 'TUS'),
+(88, 'TUS'),
+(40, 'YUM'),
+(55, 'YUM'),
+(70, 'YUM'),
+(89, 'YUM');
+
+INSERT INTO `crew_manifest` (`crew_manifest_id`) VALUES
+(1),
+(2),
+(3),
+(4),
+(5),
+(6),
+(7),
+(8),
+(9),
+(10),
+(11),
+(12),
+(13),
+(14),
+(15),
+(16),
+(17),
+(18),
+(19),
+(20);
+
+INSERT INTO `crew_scheduled` (`flight_id`, `crew_manifest_id`) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10),
+(11, 11),
+(12, 12),
+(13, 13),
+(14, 14),
+(15, 15),
+(16, 16),
+(17, 17),
+(18, 18),
+(19, 19),
+(20, 20);
+
+INSERT INTO `lead_scheduled` (`crew_manifest_id`, `lead_attendant_id`) VALUES
+(1, 6),
+(2, 6),
+(3, 6),
+(4, 13),
+(5, 14),
+(6, 52),
+(7, 53),
+(8, 54),
+(9, 55),
+(10, 56),
+(11, 57),
+(12, 58),
+(13, 59),
+(14, 60),
+(15, 61),
+(16, 62),
+(17, 63),
+(18, 64),
+(19, 65),
+(20, 66);
+
+INSERT INTO `attendants_scheduled` (`crew_manifest_id`, `attendant_id1`, `attendant_id2`) VALUES
+(1, 7, 8),
+(2, 7, 8),
+(3, 8, 13),
+(4, 6, 7),
+(5, 8, 13),
+(6, 67, 68),
+(7, 69, 70),
+(8, 71, 72),
+(9, 73, 74),
+(10, 75, 76),
+(11, 77, 78),
+(12, 79, 80),
+(13, 81, 82),
+(14, 83, 84),
+(15, 85, 86),
+(16, 87, 88),
+(17, 89, 90),
+(18, 91, 92),
+(19, 93, 94),
+(20, 95, 96);
+
+INSERT INTO `senior_scheduled` (`crew_manifest_id`, `senior_pilot_id`) VALUES
+(1, 3),
+(2, 3),
+(4, 3),
+(16, 3),
+(5, 15),
+(17, 15),
+(18, 16),
+(3, 17),
+(19, 17),
+(6, 32),
+(20, 32),
+(7, 33),
+(8, 34),
+(9, 35),
+(10, 36),
+(11, 37),
+(12, 38),
+(13, 39),
+(14, 40),
+(15, 41);
+
+INSERT INTO `copilot_scheduled` (`crew_manifest_id`, `copilot_id`) VALUES
+(1, 4),
+(2, 4),
+(16, 4),
+(3, 15),
+(4, 16),
+(5, 17),
+(17, 33),
+(18, 34),
+(19, 35),
+(20, 36),
+(6, 42),
+(7, 43),
+(8, 44),
+(9, 45),
+(10, 46),
+(11, 47),
+(12, 48),
+(13, 49),
+(14, 50),
+(15, 51);
+	
+INSERT INTO `customer` (`customer_id`, `street_number`, `street_name`, `apt_number`, `city`, `state`, `zip`) VALUES
+(1, '111', 'main st', NULL, 'Omaha', 'NE', '68123'),
+(5, '7519', 'Cherry Hill', '12', 'Omaha', 'NE', '68123'),
+(9, '123', 'Forest dr', NULL, 'Boston', 'MA', '01841'),
+(10, '52', 'Hill st', NULL, 'Denver', 'CO', '80014'),
+(11, '34', 'Arbor dr', NULL, 'San Francisco', 'CA', '94016'),
+(12, '4113', 'Oak st', '2', 'Baltimore', 'MD', '21201'),
+(18, '7874', 'Park st', NULL, 'Birmingham', 'AL', '15717'),
+(19, '9849', 'Second st', NULL, 'Dothan', 'AL', '61741'),
+(20, '9840', 'Third st', NULL, 'Huntsville', 'AL', '83066'),
+(21, '3016', 'First st', NULL, 'Mobile', 'AL', '29515'),
+(22, '1219', 'Fourth st', NULL, 'Montgomery', 'AL', '61133'),
+(23, '6878', 'Fifth st', NULL, 'Flagstaff', 'AZ', '44269'),
+(24, '7103', 'Main st', NULL, 'Phoenix', 'AZ', '33733'),
+(25, '3081', 'Sixth st', NULL, 'Tucson', 'AZ', '54358'),
+(26, '7842', 'Oak st', NULL, 'Yuma', 'AZ', '55426'),
+(27, '5400', 'Seventh st', NULL, 'Fayetteville', 'AR', '85368'),
+(28, '8081', 'Pine st', NULL, 'Little Rock', 'AR', '74895'),
+(29, '4209', 'Maple st', NULL, 'Hartford', 'CT', '38100'),
+(30, '2205', 'Cedar st', NULL, 'Atlanta', 'GA', '54756'),
+(31, '7845', 'Eighth st', NULL, 'Augusta', 'GA', '64254');
+
+INSERT INTO `passenger` (`passenger_id`, `birth_date`, `gender`) VALUES
+(1, '1993-03-11', 'M'),
+(2, '1990-12-01', 'F'),
+(9, '1994-03-02', 'F'),
+(10, '1965-05-22', 'M'),
+(11, '1978-06-29', 'M'),
+(12, '1948-12-03', 'F'),
+(18, '1983-08-12', 'M'),
+(19, '1978-10-24', 'F'),
+(20, '1982-08-10', 'M'),
+(21, '1953-08-25', 'F'),
+(22, '1990-04-27', 'M'),
+(23, '1946-02-14', 'F'),
+(24, '1970-01-22', 'M'),
+(25, '1973-02-06', 'F'),
+(26, '1944-08-18', 'M'),
+(27, '1921-08-19', 'F'),
+(28, '1997-09-13', 'M'),
+(29, '1923-02-20', 'F'),
+(30, '1953-08-15', 'M'),
+(31, '1922-12-10', 'F');
+
+INSERT INTO `seats_filled` (`ticket_id`, `flight_id`) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(21, 9),
+(22, 9),
+(23, 9),
+(24, 9),
+(25, 9),
+(26, 9),
+(27, 9),
+(28, 9),
+(29, 9),
+(30, 9),
+(31, 9),
+(32, 9),
+(33, 9),
+(34, 9),
+(35, 9),
+(36, 9),
+(37, 9),
+(38, 9),
+(39, 9),
+(40, 9),
+(10, 10),
+(11, 11),
+(12, 12),
+(13, 13),
+(14, 14),
+(15, 15),
+(16, 16),
+(17, 17),
+(18, 18),
+(19, 19),
+(20, 20);
+
+INSERT INTO `purchases` (`ticket_id`, `customer_id`) VALUES
+(1, 1),
+(2, 1),
+(6, 5),
+(3, 10),
+(4, 11),
+(5, 12),
+(7, 19),
+(8, 20),
+(9, 21),
+(10, 22),
+(11, 23),
+(12, 24),
+(13, 25),
+(14, 26),
+(15, 27),
+(16, 28),
+(17, 29),
+(18, 30),
+(19, 31),
+(20, 31);
+
+INSERT INTO `has` (`ticket_id`, `passenger_id`) VALUES
+(1, 2),
+(2, 2),
+(3, 9),
+(4, 10),
+(5, 12),
+(6, 18),
+(7, 19),
+(8, 20),
+(9, 21),
+(10, 22),
+(11, 23),
+(12, 24),
+(13, 25),
+(14, 26),
+(15, 27),
+(16, 28),
+(17, 29),
+(18, 30),
+(19, 31),
+(20, 31);
+
+3. SQL queries
+	
+	This database acts as a record of prior airline activities and was designed
+	the intent that either a customer or employee would use a web browser to
+	provide form data with which to feed into the following queries to make
+	selections and updates to the database.
+
+// Add a new airplane
+INSERT INTO `airplane` (`airplane_id`, `make`, `model`, `factory_date`, `miles`, `passenger_capacity`) VALUES (NULL, 'Boeing', '737', '2017-03-01', '500', '150');
+
+// Add a new flight
+INSERT INTO `flight` (`flight_id`, `departure_date`, `departure_time`, `arrival_date`, `arrival_time`) VALUES (NULL, '2017-03-29', '07:00:00', '2017-03-29', '00:17:00');
+INSERT INTO `departure` (`flight_id`, `airport_id`) VALUES ('1', 'LAX');
+INSERT INTO `arrival` (`flight_id`, `airport_id`) VALUES ('1', 'OMA');
+INSERT INTO `plane_scheduled` (`flight_id`, `airplane_id`) VALUES ('1', '1');
+INSERT INTO `crew_scheduled` (`flight_id`, `crew_manifest_id`) VALUES ('1', '1')
+
+// Add tickets for seats on new flight
+INSERT INTO `ticket` (`ticket_id`, `seat_number`, `price`) VALUES (NULL, '1', '300.00');
+INSERT INTO `seats_filled` (`ticket_id`, `flight_id`) VALUES ('1', '1');
+
+// View Airports
+SELECT * FROM `airport`;
+
+	returns the following
+		airport_id	city	state	
+		AGS			Augusta	GA	
+		ATL			Atlanta	GA	
+		BDL			Hartford	CT	
+		BHM			Birmingham	AL	
+		CGX			Chicago	IL	
+		DFW			Dallas	TX	
+		DHM			Dothan	AL	
+		FLG			Flagstaff	AZ	
+		FYV			Fayetteville	AR	
+		HSV			Huntsville	AL	
+		LAX			Los Angeles	CA	
+		LIT			Little Rock	AR	
+		MGM			Montgomery	AL	
+		MOB			Mobile	AL	
+		OMA			Omaha	NE	
+		PDX			Portland	OR	
+		PHX			Phoenix	AZ	
+		SAV			Savannah	GA	
+		TUS			Tucson	AZ	
+		YUM			Yuma	AZ
+
+// View available airplanes on a certain day
+SELECT airplane_id
+FROM flight NATURAL JOIN plane_scheduled
+WHERE arrival_date = '2017-03-01' AND arrival_time < '14:00:00';
+
+	returns the following
+		airplane_id	
+		1	
+
+// View available crews on a certain day
+SELECT crew_manifest_id
+FROM flight NATURAL JOIN crew_scheduled
+WHERE arrival_date = '2017-03-01' AND arrival_time < '14:00:00';
+
+	returns the following
+		crew_manifest_id	
+		1
+
+// Add a new crew manifest
+INSERT INTO `crew_manifest` (`crew_manifest_id`) VALUES (NULL);
+INSERT INTO `senior_scheduled` (`crew_manifest_id`, `senior_pilot_id`) VALUES ('1', '1');
+INSERT INTO `copilot_scheduled` (`crew_manifest_id`, `copilot_id`) VALUES ('1', '2');
+INSERT INTO `lead_scheduled` (`crew_manifest_id`, `lead_attendant_id`) VALUES ('1', '3');
+INSERT INTO `attendants_scheduled` (`crew_manifest_id`, `attendant_id1`, `attendant_id2`) VALUES ('1', '4', '5');
+
+// View available senior pilots on a certain day
+select pilot_id
+from pilot
+where rank = 'senior' and pilot_id not in (
+select senior_pilot_id
+from senior_scheduled natural join (
+select crew_manifest_id
+FROM flight natural join crew_scheduled
+where departure_date = '2017-04-01') as flight_crew) and pilot_id not in (
+select copilot_id
+from copilot_scheduled natural join (
+select crew_manifest_id
+FROM flight natural join crew_scheduled
+where departure_date = '2017-04-01') as flight_crew);
+
+	returns the following
+		pilot_id
+		3
+		15
+		16
+		17
+		32
+		33
+		34
+		35
+		36
+		37
+		38
+		39
+		41
+
+// View available pilots for a certain day
+select pilot_id
+from pilot
+where pilot_id not in (
+select senior_pilot_id
+from senior_scheduled natural join (
+select crew_manifest_id
+FROM flight natural join crew_scheduled
+where departure_date = '2017-04-01') as flight_crew) and pilot_id not in (
+select copilot_id
+from copilot_scheduled natural join (
+select crew_manifest_id
+FROM flight natural join crew_scheduled
+where departure_date = '2017-04-01') as flight_crew);
+
+	returns the following
+		pilot_id
+		3
+		4
+		15
+		16
+		17
+		32
+		33
+		34
+		35
+		36
+		37
+		38
+		39
+		41
+		42
+		43
+		44
+		45
+		46
+		47
+		48
+		49
+		51
+
+// View available lead flight attendants for a certain day
+select attendant_id
+from flight_attendant
+where rank = 'senior' and attendant_id not in (
+select lead_attendant_id
+from lead_scheduled natural join (
+select crew_manifest_id
+FROM flight natural join crew_scheduled
+where departure_date = '2017-04-01') as flight_crew) and attendant_id not in (
+select attendant_id1
+from attendants_scheduled natural join (
+select crew_manifest_id
+FROM flight natural join crew_scheduled
+where departure_date = '2017-04-01') as flight_crew) and attendant_id not in (
+select attendant_id2
+from attendants_scheduled natural join (
+select crew_manifest_id
+FROM flight natural join crew_scheduled
+where departure_date = '2017-04-01') as flight_crew);
+
+	returns the following
+		attendant_id
+		6
+		13
+		14
+		52
+		53
+		54
+		55
+		56
+		57
+		58
+		59
+		61
+		62
+		63
+		64
+		65
+		66
+		68
+		69
+		70
+		71
+		72
+		77
+		81
+		82
+		85
+		86
+		87
+		88
+		89
+		90
+		92
+		94
+		95
+		98
+		99
+
+// View available flight attendants for a certain day
+select attendant_id
+from flight_attendant
+where attendant_id not in (
+select lead_attendant_id
+from lead_scheduled natural join (
+select crew_manifest_id
+FROM flight natural join crew_scheduled
+where departure_date = '2017-04-01') as flight_crew) and attendant_id not in (
+select attendant_id1
+from attendants_scheduled natural join (
+select crew_manifest_id
+FROM flight natural join crew_scheduled
+where departure_date = '2017-04-01') as flight_crew) and attendant_id not in (
+select attendant_id2
+from attendants_scheduled natural join (
+select crew_manifest_id
+FROM flight natural join crew_scheduled
+where departure_date = '2017-04-01') as flight_crew);
+
+	returns the following
+		attendant_id
+		6
+		7
+		8
+		13
+		14
+		52
+		53
+		54
+		55
+		56
+		57
+		58
+		59
+		61
+		62
+		63
+		64
+		65
+		66
+		67
+		68
+		69
+		70
+		71
+		72
+		73
+		74
+		75
+		76
+		77
+		78
+		79
+		80
+		81
+		82
+		85
+		86
+		87
+		88
+		89
+		90
+		91
+		92
+		93
+		94
+		95
+		96
+		97
+		98
+		99
+
+// Add a new pilot
+INSERT INTO `person` (`person_id`, `first_name`, `last_name`, `phone_number`, `email`) VALUES (NULL, 'Mark', 'Steven', '4025551234', 'msteven@mail.com');
+INSERT INTO `employee` (`employee_id`, `birth_date`, `gender`, `street_number`, `street_name`, `apt_number`, `city`, `state`, `zip`, `start_date`, `salary`) VALUES ('1', '1970-06-26', 'M', '123', 'main st', NULL, 'Omaha', 'NE', '68123', '2010-09-26', '125000.42');
+INSERT INTO `pilot` (`pilot_id`, `pilot_hours`, `cell_phone`, `rank`) VALUES ('1', '3000', '4025551234', 'senior');
+INSERT INTO `home_airport` (`employee_id`, `airport_id`) VALUES ('1', 'OMA');
+
+// Promote pilot
+UPDATE pilot
+set rank = 'senior'
+where pilot_hours > 3000;
+
+// Add a new flight attendant
+INSERT INTO `person` (`person_id`, `first_name`, `last_name`, `phone_number`, `email`) VALUES (NULL, 'Mark', 'Steven', '4025551234', 'msteven@mail.com');
+INSERT INTO `employee` (`employee_id`, `birth_date`, `gender`, `street_number`, `street_name`, `apt_number`, `city`, `state`, `zip`, `start_date`, `salary`) VALUES ('1', '1970-06-26', 'M', '123', 'main st', NULL, 'Omaha', 'NE', '68123', '2010-09-26', '125000.42');
+INSERT INTO `flight_attendant` (`attendant_id`, `flight_hours`, `cell_phone`, `rank`) VALUES ('3', '5000', '4025551234', 'senior');
+INSERT INTO `home_airport` (`employee_id`, `airport_id`) VALUES ('1', 'OMA');
+
+// Promote flight attendant
+UPDATE flight_attendant
+set rank = 'senior'
+where flight_hours > 1000;
+
+// Find employee birthdays
+select employee_id
+from employee
+where DAYOFMONTH(birth_date) = DAYOFMONTH(CURRENT_DATE) AND
+MONTH(birth_date) = MONTH(CURRENT_DATE);
+
+// Search for flights by departure date
+select flight.flight_id, dep.airport_id, dep.city, dep.state, flight.departure_date, flight.departure_time, arr.airport_id, arr.city, arr.state, flight.arrival_date, flight.arrival_time
+from flight
+	join arrival natural join airport as arr on 
+    	flight.flight_id = arrival.flight_id
+    join departure natural join airport as dep on
+    	flight.flight_id = departure.flight_id
+where flight.departure_date = '2017-04-17';
+
+	returns the following
+		flight_id	airport_id	city	state	departure_date	departure_time	airport_id	city	state	arrival_date	arrival_time	
+		9			MGM			Montgomery	AL	2017-04-17		01:45:00		MOB			Mobile	AL		2017-04-17		01:45:00	
+		10			FLG			Flagstaff	AZ	2017-04-17		05:12:00		MGM			Montgomery	AL	2017-04-17		08:24:00	
+
+// See available seats on a flight
+select seats_filled.flight_id, seats_filled.ticket_id, ticket.seat_number, ticket.price
+from seats_filled natural join ticket
+where seats_filled.flight_id = 9 AND
+seats_filled.ticket_id not in (
+    select has.ticket_id
+	from has);
+
+	returns the following
+		flight_id	ticket_id	seat_number	price	
+		9			21			1			736.30	
+		9			22			2			418.75	
+		9			23			3			513.20	
+		9			24			4			324.86	
+		9			25			5			324.69	
+		9			26			6			195.31	
+		9			27			7			663.20	
+		9			28			8			552.24	
+		9			29			9			272.16	
+		9			30			10			723.71	
+		9			31			11			379.48	
+		9			32			12			459.43	
+		9			33			13			745.66	
+		9			34			14			554.61	
+		9			35			15			262.60	
+		9			36			16			766.84	
+		9			37			17			295.23	
+		9			38			18			413.58	
+		9			39			19			678.66	
+		9			40			20			424.78	
+
+// Add a new customer
+INSERT INTO `person` (`person_id`, `first_name`, `last_name`, `phone_number`, `email`) VALUES (NULL, 'Mark', 'Steven', '4025551234', 'msteven@mail.com');
+INSERT INTO `customer` (`customer_id`, `street_number`, `street_name`, `apt_number`, `city`, `state`, `zip`) VALUES ('1', '123', 'main st', NULL, 'Omaha', 'NE', '68123');
+
+// Add a new passenger
+INSERT INTO `person` (`person_id`, `first_name`, `last_name`, `phone_number`, `email`) VALUES (NULL, 'Mark', 'Steven', '4025551234', 'msteven@mail.com');
+INSERT INTO `passenger` (`passenger_id`, `birth_date`, `gender`) VALUES ('1', '1970-06-26', 'M');
+INSERT INTO `has` (`ticket_id`, `passenger_id`) VALUES ('21', '1');
+
+4. Original SQL specification from Phase 1
+
+CREATE TABLE `airplane` (
+  `airplane_id` int(11) NOT NULL PRIMARY KEY,
+  `make` varchar(20) NOT NULL,
+  `model` varchar(30) NOT NULL,
+  `factory_date` date NOT NULL,
+  `miles` int(15) NOT NULL,
+  `passenger_capacity` int(4) NOT NULL
+) 
+
+CREATE TABLE `airport` (
+  `airport_id` char(3) NOT NULL PRIMARY KEY,
+  `city` varchar(30) NOT NULL,
+  `state` char(2) NOT NULL
+) 
+
+CREATE TABLE `arrival` (
+  `flight_id` int(11) NOT NULL PRIMARY KEY,
+  `airport_id` char(3) NOT NULL,
+  FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`),
+  FOREIGN KEY (`airport_id`) REFERENCES `airport` (`airport_id`)
+) 
+
+CREATE TABLE `attendants_scheduled` (
+  `crew_manifest_id` int(11) NOT NULL PRIMARY KEY,
+  `attendant_id1` int(11) NOT NULL,
+  `attendant_id2` int(11) NOT NULL,
+  FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`),
+  FOREIGN KEY (`attendant_id1`) REFERENCES `flight_attendant` (`attendant_id`),
+  FOREIGN KEY (`attendant_id2`) REFERENCES `flight_attendant` (`attendant_id`)
+) 
+
+CREATE TABLE `copilot_scheduled` (
+  `crew_manifest_id` int(11) NOT NULL PRIMARY KEY,
+  `copilot_id` int(11) NOT NULL,
+  FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`),
+  FOREIGN KEY (`copilot_id`) REFERENCES `pilot` (`pilot_id`)
+) 
+
+CREATE TABLE `crew_manifest` (
+  `crew_manifest_id` int(11) NOT NULL PRIMARY KEY
+) 
+
+CREATE TABLE `crew_scheduled` (
+  `flight_id` int(11) NOT NULL PRIMARY KEY,
+  `crew_manifest_id` int(11) NOT NULL,
+  FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`),
+  FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`)
+) 
+
+CREATE TABLE `customer` (
+  `customer_id` int(11) NOT NULL PRIMARY KEY,
+  `street_number` varchar(10) NOT NULL,
+  `street_name` varchar(30) NOT NULL,
+  `apt_number` varchar(10) DEFAULT NULL,
+  `city` varchar(30) NOT NULL,
+  `state` char(2) NOT NULL,
+  `zip` char(5) NOT NULL,
+  FOREIGN KEY (`customer_id`) REFERENCES `person` (`person_id`)
+) 
+
+CREATE TABLE `departure` (
+  `flight_id` int(11) NOT NULL PRIMARY KEY,
+  `airport_id` char(3) NOT NULL,
+  FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`),
+  FOREIGN KEY (`airport_id`) REFERENCES `airport` (`airport_id`)
+) 
+
+CREATE TABLE `employee` (
+  `employee_id` int(11) NOT NULL PRIMARY KEY,
+  `birth_date` date NOT NULL,
+  `gender` char(1) NOT NULL,
+  `street_number` varchar(10) NOT NULL,
+  `street_name` varchar(30) NOT NULL,
+  `apt_number` varchar(10) DEFAULT NULL,
+  `city` varchar(30) NOT NULL,
+  `state` char(2) NOT NULL,
+  `zip` char(5) NOT NULL,
+  `start_date` date NOT NULL,
+  `salary` decimal(9,2) NOT NULL,
+  FOREIGN KEY (`employee_id`) REFERENCES `person` (`person_id`)
+) 
+
+CREATE TABLE `flight` (
+  `flight_id` int(11) NOT NULL PRIMARY KEY,
+  `departure_date` date NOT NULL,
+  `departure_time` time NOT NULL,
+  `arrival_date` date NOT NULL,
+  `arrival_time` time NOT NULL
+) 
+
+CREATE TABLE `flight_attendant` (
+  `attendant_id` int(11) NOT NULL PRIMARY KEY,
+  `flight_hours` decimal(12,2) NOT NULL,
+  `cell_phone` char(10) NOT NULL,
+  `rank` varchar(15) NOT NULL,
+  FOREIGN KEY (`attendant_id`) REFERENCES `employee` (`employee_id`)
+) 
+
+CREATE TABLE `has` (
+  `ticket_id` int(11) NOT NULL PRIMARY KEY,
+  `passenger_id` int(11) NOT NULL,
+  FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`ticket_id`),
+  FOREIGN KEY (`passenger_id`) REFERENCES `passenger` (`passenger_id`)
+) 
+
+CREATE TABLE `home_airport` (
+  `employee_id` int(11) NOT NULL PRIMARY KEY,
+  `airport_id` char(3) NOT NULL,
+  FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`),
+  FOREIGN KEY (`airport_id`) REFERENCES `airport` (`airport_id`)
+) 
+
+CREATE TABLE `lead_scheduled` (
+  `crew_manifest_id` int(11) NOT NULL PRIMARY KEY,
+  `lead_attendant_id` int(11) NOT NULL,
+  FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`),
+  FOREIGN KEY (`lead_attendant_id`) REFERENCES `flight_attendant` (`attendant_id`)
+) 
+
+CREATE TABLE `passenger` (
+  `passenger_id` int(11) NOT NULL PRIMARY KEY,
+  `birth_date` date NOT NULL,
+  `gender` char(1) NOT NULL,
+  FOREIGN KEY (`passenger_id`) REFERENCES `person` (`person_id`)
+) 
+
+CREATE TABLE `person` (
+  `person_id` int(11) NOT NULL PRIMARY KEY,
+  `first_name` varchar(30) NOT NULL,
+  `last_name` varchar(30) NOT NULL,
+  `phone_number` char(10) NOT NULL,
+  `email` varchar(30) NOT NULL
+) 
+
+CREATE TABLE `pilot` (
+  `pilot_id` int(11) NOT NULL PRIMARY KEY,
+  `pilot_hours` decimal(12,2) NOT NULL,
+  `cell_phone` char(10) NOT NULL,
+  `rank` varchar(15) NOT NULL,
+  FOREIGN KEY (`pilot_id`) REFERENCES `employee` (`employee_id`)
+) 
+
+CREATE TABLE `plane_scheduled` (
+  `flight_id` int(11) NOT NULL PRIMARY KEY,
+  `airplane_id` int(11) NOT NULL,
+  FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`),
+  FOREIGN KEY (`airplane_id`) REFERENCES `airplane` (`airplane_id`)
+) 
+
+CREATE TABLE `purchases` (
+  `ticket_id` int(11) NOT NULL PRIMARY KEY,
+  `customer_id` int(11) NOT NULL,
+  FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`ticket_id`),
+  FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
+) 
+
+CREATE TABLE `seats_filled` (
+  `ticket_id` int(11) NOT NULL PRIMARY KEY,
+  `flight_id` int(11) NOT NULL,
+  FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`ticket_id`),
+  FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`)
+) 
+
+CREATE TABLE `senior_scheduled` (
+  `crew_manifest_id` int(11) NOT NULL PRIMARY KEY,
+  `senior_pilot_id` int(11) NOT NULL,
+  FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`),
+  FOREIGN KEY (`senior_pilot_id`) REFERENCES `pilot` (`pilot_id`)
+) 
+
+CREATE TABLE `ticket` (
+  `ticket_id` int(11) NOT NULL PRIMARY KEY,
+  `seat_number` int(11) NOT NULL,
+  `price` decimal(7,2) NOT NULL
+)
+
+5. Changes from Phase 1
+	
+	I added auto_increment to the following tables in order to abstract away
+	the need to constantly calculate a unique key to use as an integer primary
+	key when performing inserts.	
+
+	airplane	
+	crew_manifest
+	flight
+	person
+	ticket
