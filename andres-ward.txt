@@ -1123,27 +1123,27 @@ INSERT INTO `seats_filled` (`ticket_id`, `flight_id`) VALUES ('1', '1');
 SELECT * FROM `airport`;
 
 	returns the following
-		airport_id	city	state	
-		AGS			Augusta	GA	
-		ATL			Atlanta	GA	
-		BDL			Hartford	CT	
-		BHM			Birmingham	AL	
-		CGX			Chicago	IL	
-		DFW			Dallas	TX	
-		DHM			Dothan	AL	
-		FLG			Flagstaff	AZ	
-		FYV			Fayetteville	AR	
-		HSV			Huntsville	AL	
-		LAX			Los Angeles	CA	
-		LIT			Little Rock	AR	
-		MGM			Montgomery	AL	
-		MOB			Mobile	AL	
-		OMA			Omaha	NE	
-		PDX			Portland	OR	
-		PHX			Phoenix	AZ	
-		SAV			Savannah	GA	
-		TUS			Tucson	AZ	
-		YUM			Yuma	AZ
+		airport_id	city		state	
+		AGS		Augusta		GA	
+		ATL		Atlanta		GA	
+		BDL		Hartford	CT	
+		BHM		Birmingham	AL	
+		CGX		Chicago		IL	
+		DFW		Dallas		TX	
+		DHM		Dothan		AL	
+		FLG		Flagstaff	AZ	
+		FYV		Fayetteville	AR	
+		HSV		Huntsville	AL	
+		LAX		Los Angeles	CA	
+		LIT		Little Rock	AR	
+		MGM		Montgomery	AL	
+		MOB		Mobile		AL	
+		OMA		Omaha		NE	
+		PDX		Portland	OR	
+		PHX		Phoenix		AZ	
+		SAV		Savannah	GA	
+		TUS		Tucson		AZ	
+		YUM		Yuma		AZ
 
 // View available airplanes on a certain day
 SELECT airplane_id
@@ -1413,8 +1413,8 @@ where flight.departure_date = '2017-04-17';
 
 	returns the following
 		flight_id	airport_id	city	state	departure_date	departure_time	airport_id	city	state	arrival_date	arrival_time	
-		9			MGM			Montgomery	AL	2017-04-17		01:45:00		MOB			Mobile	AL		2017-04-17		01:45:00	
-		10			FLG			Flagstaff	AZ	2017-04-17		05:12:00		MGM			Montgomery	AL	2017-04-17		08:24:00	
+		9		MGM	Montgomery	AL	2017-04-17	01:45:00	MOB		Mobile	AL	2017-04-17	01:45:00	
+		10		FLG	Flagstaff	AZ	2017-04-17	05:12:00	MGM	Montgomery	AL	2017-04-17	08:24:00	
 
 // See available seats on a flight
 select seats_filled.flight_id, seats_filled.ticket_id, ticket.seat_number, ticket.price
@@ -1426,26 +1426,26 @@ seats_filled.ticket_id not in (
 
 	returns the following
 		flight_id	ticket_id	seat_number	price	
-		9			21			1			736.30	
-		9			22			2			418.75	
-		9			23			3			513.20	
-		9			24			4			324.86	
-		9			25			5			324.69	
-		9			26			6			195.31	
-		9			27			7			663.20	
-		9			28			8			552.24	
-		9			29			9			272.16	
-		9			30			10			723.71	
-		9			31			11			379.48	
-		9			32			12			459.43	
-		9			33			13			745.66	
-		9			34			14			554.61	
-		9			35			15			262.60	
-		9			36			16			766.84	
-		9			37			17			295.23	
-		9			38			18			413.58	
-		9			39			19			678.66	
-		9			40			20			424.78	
+		9		21		1		736.30	
+		9		22		2		418.75	
+		9		23		3		513.20	
+		9		24		4		324.86	
+		9		25		5		324.69	
+		9		26		6		195.31	
+		9		27		7		663.20	
+		9		28		8		552.24	
+		9		29		9		272.16	
+		9		30		10		723.71	
+		9		31		11		379.48	
+		9		32		12		459.43	
+		9		33		13		745.66	
+		9		34		14		554.61	
+		9		35		15		262.60	
+		9		36		16		766.84	
+		9		37		17		295.23	
+		9		38		18		413.58	
+		9		39		19		678.66	
+		9		40		20		424.78	
 
 // Add a new customer
 INSERT INTO `person` (`person_id`, `first_name`, `last_name`, `phone_number`, `email`) VALUES (NULL, 'Mark', 'Steven', '4025551234', 'msteven@mail.com');
