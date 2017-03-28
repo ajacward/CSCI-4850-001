@@ -150,10 +150,6 @@ CREATE TABLE `ticket` (
   `price` decimal(7,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---------------------------------------------------
-Primary/Foreign Keys :
---------------------------------------------------
-
 ALTER TABLE `airplane`
   ADD PRIMARY KEY (`airplane_id`);
   
@@ -314,10 +310,6 @@ ALTER TABLE `seats_filled`
 ALTER TABLE `senior_scheduled`
   ADD CONSTRAINT `senior_scheduled_ibfk_2` FOREIGN KEY (`senior_pilot_id`) REFERENCES `pilot` (`pilot_id`),
   ADD CONSTRAINT `senior_scheduled_ibfk_3` FOREIGN KEY (`crew_manifest_id`) REFERENCES `crew_manifest` (`crew_manifest_id`);
-  
----------------------------------------------------------------
-Inserts :
----------------------------------------------------------------  
   
 INSERT INTO `airplane` (`airplane_id`, `make`, `model`, `factory_date`, `miles`, `passenger_capacity`) VALUES
 (1, 'Boeing', '707', '2016-12-01', 500, 140),
