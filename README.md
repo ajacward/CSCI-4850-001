@@ -5,6 +5,7 @@ To set up this web application please observe the following steps.
 2. Create a database in your localhost/phpmyadmin called airlinesystem and select it for use.
     
   CREATE DATABASE airlinesystem;
+  
   USE airlinesystem;
   
 3. Access the file andres-ward.txt in this repo and copy/paste all the statements from part 2.
@@ -34,12 +35,19 @@ To set up this web application please observe the following steps.
    It is important that the database be called airlinesystem and that the user info be the above.
    This is because the following information is checked for connecting to the database in the php scripts.
    
-  $serverName = "localhost";
+  	$serverName = "localhost";
+	
 	$userName = "user";
+	
 	$password = "passwd";
+	
 	$dbName = "airlinesystem";
 	
 	$conn = new mysqli($serverName, $userName, $password, $dbName);
+	
+ 6. visit the following url
+ 	
+	localhost/airlineSystemApp
   
 ----------------------------------------------------------------------------------------------------------------
   Please use a recent version of Chrome when testing for a similar environment.
